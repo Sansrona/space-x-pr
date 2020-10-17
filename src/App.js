@@ -1,6 +1,10 @@
 import React from 'react';
+import {BrowserRouter, Route} from 'react-router-dom';
+
 import Header from "./components/header/Header";
-import Main from './components/main/Main';
+import Home from './components/Home/Home';
+import Calendar from './components/calendar/Calendar';
+import Details from './components/details/Details';
 import Features from './components/features/Features';
 import Footer from './components/footer/Footer';
 import './style.css';
@@ -15,10 +19,12 @@ class App extends React.Component{
     rocket: 'Falcon 1',
     rocketFeatures: null,
     rockets: [],
+    company: null,
   };
 
   componentDidMount(){
     this.updateRocket();
+    this.updateCompany();
 
   }
 
@@ -39,17 +45,25 @@ class App extends React.Component{
     }, this.updateRocket);
   }
 
+  updateCompany = () => {
+    this.fetchData.getCompany()
+      .then(company => this.setState({company}) );
+  }
+
   render(){
     console.log(this.state);
     
     return (
-    <React.Fragment>
-    <Header rockets={this.state.rockets} changeRocket={this.changeRocket}/>
-    <Main rocket={this.state.rocket}/>
-    <Features  rocket={this.state.rocket} rocketFeatures={this.state.rocketFeatures}/>
-    <Footer />
+    <BrowserRouter>
+      <Header rockets={this.state.rockets} changeRocket={this.changeRocket}/>
+      <Route exact path='/' render={() => this.state.company && <Home company={this.state.company}/> }/>   
+      <Route path='/rocket' render={() => this.state.rocketFeatures && <Features  {...this.state.rocketFeatures}/>}/>
+      <Route  path='/calendar' component={Calendar} />
+      <Route  path='/details/:id' component={Details} />
+        
+    {this.state.company && <Footer {...this.state.company}/>}
 
-</React.Fragment>
+    </BrowserRouter>
     
     );
   }

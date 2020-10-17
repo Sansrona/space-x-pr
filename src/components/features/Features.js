@@ -1,5 +1,6 @@
 import React from 'react';
-import RellaxWrapper from 'react-rellax-wrapper'
+import RellaxWrapper from 'react-rellax-wrapper';
+import Main from '../main/Main';
 
 import './features.css'
 
@@ -7,44 +8,48 @@ const photo = {
     'Falcon 1': 'falcon-1',
     'Falcon 9': 'falcon-9',
     'Falcon Heavy': 'falcon-heavy',
-    other: 'starship',
+    Starship: 'starship',
   }
 
-const Features = ({rocket , rocketFeatures}) => {
-    return (
-    <section className="features">
-    <h2 className="features-title">
-        {rocket} <br/>Overview
-    </h2>
-    <div className="overview">
+const Features = ({name, height, diameter, mass, payload_weights: payloadWeights, description}) => (
+    <>
+                <Main rocket={name}/>
+                <section className="features">
+                <h2 className="features-title">
+                {name} <br/>Overview
+                 </h2>
+                  <div className="overview">
 
-        <table className="table">
-            <caption className="table-title">
-                Size
-            </caption>
-            <thead>
+                <table className="table">
+                    <caption className="table-title">
+                        Size
+                    </caption>
+                    <thead>
                 <tr>
                     <td className="table-column">HEIGHT</td>
-                    <td className="table-column">22.25 m / 73 ft</td>
+                    <td className="table-column">{height.meters} m / {height.feet} ft</td>
                 </tr>
                 <tr>
                     <td className="table-column">DIAMETER</td>
-                    <td className="table-column">1.68 m / 5.5 ft</td>
+                    <td className="table-column">{diameter.meters} m / {diameter.feet} ft</td>
                 </tr>
                 <tr>
                     <td className="table-column">MASS</td>
-                    <td className="table-column">30,146 kg / 66,460 lb</td>
+                    <td className="table-column">{mass.kg} kg / {mass.lb} lb</td>
                 </tr>
-                <tr>
-                    <td className="table-column">PAYLOAD TO LEO</td>
-                    <td className="table-column">450 kg / 992 lb</td>
+                {payloadWeights.map((item) => (
+                <tr key={item.id}>
+                    <td className="table-column">PAYLOAD TO {item.id.toUpperCase()}</td>
+                    <td className="table-column">{item.kg} kg / {item.lb} lb</td>
                 </tr>
+                ))}
+               
             </thead>
         </table>
         <RellaxWrapper speed={14}>
         <img
-                src= {`img/${photo.hasOwnProperty(rocket) ? photo[rocket] : photo.other}.png`}
-                alt={photo.hasOwnProperty(rocket) ? photo[rocket] : photo.other}
+                src= {`img/${photo[name]}.png`}
+                alt={photo.hasOwnProperty(name) ? photo[name] : photo.other}
                 className="rocket"
         />
         </RellaxWrapper>
@@ -52,15 +57,15 @@ const Features = ({rocket , rocketFeatures}) => {
         <article>
             <h3 className="features-subtitle">DESCRIPTION</h3>
             <p className="features-text">
-                The Falcon 1 was an expendable launch system privately developed and manufactured by SpaceX during 2006-2009. On 28 September 2008, Falcon 1 became the first privately-developed liquid-fuel launch vehicle to go into orbit around the Earth.
+                {description}
             </p>
         </article>
         </div>
-    </section>
+        </section>
+           
+        </>
         
-        
-        )
-    };
+        );
 
 
 export default Features;
